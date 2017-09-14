@@ -1,12 +1,12 @@
 {
   "name": "ngx-reactivetoolkit",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "deploy": "cp package.json dist/package.json && cp README.md dist/README.md && cd dist && npm publish"
+    "deploy": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cd dist && npm publish"
   },
   "repository": {
     "type": "git",
