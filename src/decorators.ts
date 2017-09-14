@@ -1,7 +1,7 @@
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/takeUntil';
 import { SimpleChanges } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Subject } from 'rxjs/Subject';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
@@ -23,8 +23,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 */
 
 export function Destroy() {
-    return function (target: any, key: string) {
-        target[key] = new ReplaySubject(1);
+    return function (target: any, key: string, descriptor: any) {
+        target[key] = new Subject();
         const oldNgOnDestroy = target.ngOnDestroy;
         target.ngOnDestroy = () => {
             if (oldNgOnDestroy) {
@@ -52,7 +52,7 @@ export function Destroy() {
 */
 export function Changes() {
     return function (target: any, key: string) {
-        target[key] = new ReplaySubject(1);
+        target[key] = new Subject();
         const oldNgOnChanges = target.ngOnChanges;
         target.ngOnChanges = (simpleChanges: SimpleChanges) => {
             if (oldNgOnChanges) {
