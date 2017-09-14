@@ -23,7 +23,7 @@ import { Subject } from 'rxjs/Subject';
 */
 
 export function Destroy() {
-    return function (target: any, key: string, descriptor: any) {
+    return function (target: any, key: string) {
         target[key] = new Subject();
         const oldNgOnDestroy = target.ngOnDestroy;
         target.ngOnDestroy = () => {
