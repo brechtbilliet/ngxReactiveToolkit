@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "cp package.json dist/package.json && cd dist"
   },
   "repository": {
     "type": "git",
