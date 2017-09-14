@@ -24,13 +24,13 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export function Destroy() {
     return function (target: any, key: string) {
-        target.constructor.prototype[key] = new ReplaySubject(1);
-        const oldNgOnDestroy = target.constructor.prototype.ngOnDestroy;
-        target.constructor.prototype.ngOnDestroy = () => {
+        target[key] = new ReplaySubject(1);
+        const oldNgOnDestroy = target.ngOnDestroy;
+        target.ngOnDestroy = () => {
             if (oldNgOnDestroy) {
                 oldNgOnDestroy();
             }
-            target.constructor.prototype[key].next(true);
+            target[key].next(true);
         }
     }
 }
@@ -52,13 +52,13 @@ export function Destroy() {
 */
 export function Changes() {
     return function (target: any, key: string) {
-        target.constructor.prototype[key] = new ReplaySubject(1);
-        const oldNgOnChanges = target.constructor.prototype.ngOnChanges;
-        target.constructor.prototype.ngOnChanges = (simpleChanges: SimpleChanges) => {
+        target[key] = new ReplaySubject(1);
+        const oldNgOnChanges = target.ngOnChanges;
+        target.ngOnChanges = (simpleChanges: SimpleChanges) => {
             if (oldNgOnChanges) {
                 oldNgOnChanges();
             }
-            target.constructor.prototype[key].next(simpleChanges);
+            target[key].next(simpleChanges);
         }
     }
 }
