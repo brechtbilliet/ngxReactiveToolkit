@@ -2,6 +2,8 @@ import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/takeUntil';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
@@ -50,15 +52,22 @@ export function Destroy() {
         }
     }
 */
-export function Changes() {
+export function Changes(inputProp?: string) {
     return function (target: any, key: string) {
-        target[key] = new Subject();
+        const subject = new Subject();
+        target[key] = inputProp ? subject
+            .filter(changes => !!changes && changes[inputProp] && changes[inputProp].currentValue)
+            .map(changes => changes[inputProp].currentValue) : subject;
         const oldNgOnChanges = target.ngOnChanges;
+        if (!target._subjectsToNext) {
+            target._subjectsToNext = [];
+        }
+        target._subjectsToNext.push(subject);
         target.ngOnChanges = (simpleChanges: SimpleChanges) => {
             if (oldNgOnChanges) {
                 oldNgOnChanges();
             }
-            target[key].next(simpleChanges);
+            target._subjectsToNext.forEach(sub => sub.next(simpleChanges));
         }
     }
 }
