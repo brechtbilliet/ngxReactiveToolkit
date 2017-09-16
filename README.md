@@ -19,7 +19,7 @@ In that case there are two things you can do:
 The Destroy decorator covers that logic for you.
 
 ```
-import {Destroy} from 'ngxReactiveToolkit';
+import {Destroy} from 'ngx-reactiveToolkit';
 @Component({
     selector: 'my-component',
     template: `...`,
@@ -47,7 +47,7 @@ reactive code in dumb components as well.
 The changes decorator covers that logic for you.
 
 ```
-import {Changes} from 'ngxReactiveToolkit';
+import {Changes} from 'ngx-reactiveToolkit';
 @Component({
     selector: 'my-component',
     template: `...`,
@@ -64,5 +64,20 @@ export class HelloComponent {
     }
     a$ = this.changes$.filter(changes => changes.a).map(changes => changes.a.currentValue);
     b$ = this.changes$.filter(changes => changes.b).map(changes => changes.b.currentValue);
+}
+```
+
+You could also pass the name of an input to create a stream directly from that input.
+```
+import {Changes} from 'ngx-reactiveToolkit';
+@Component({
+    selector: 'my-component',
+    template: `...`,
+})
+export class HelloComponent {
+    @Input() a;
+    @Input() b;
+    @Changes('a') a$; // will get nexted every time a changes
+    @Changes('b') b$; // will get nexted every time b changes
 }
 ```

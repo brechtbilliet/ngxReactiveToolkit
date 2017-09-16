@@ -1,9 +1,6 @@
-import 'rxjs/add/observable/interval';
-import 'rxjs/add/operator/takeUntil';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
+import 'rxjs';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
