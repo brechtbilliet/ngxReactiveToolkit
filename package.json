@@ -1,11 +1,11 @@
 {
   "name": "ngx-reactivetoolkit",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "index.js",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "tsc",
+    "build": "ngc",
     "deploy": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cd dist && npm publish"
   },
   "repository": {
@@ -24,6 +24,8 @@
     "rxjs": "^5.4.3"
   },
   "devDependencies": {
+    "@angular/compiler": "^4.4.1",
+    "@angular/compiler-cli": "^4.4.1",
     "rimraf": "^2.6.2",
     "typescript": "^2.5.2"
   }
