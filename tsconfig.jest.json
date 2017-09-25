@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es5",
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "outDir": "ts-build",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "ES2015",
+      "DOM"
+    ]
+  },
+
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts*"
+  ]
+}
