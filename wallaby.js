@@ -19,6 +19,9 @@ module.exports = function (wallaby) {
         compilers: {
             'src/**/*.ts': wallaby.compilers.typeScript(Object.assign(require('./tsconfig.jest.json'), {typescript: ts}))
         },
+        filesWithNoCoverageCalculated: [
+            'src/index.ts'
+        ],
         testFramework: 'jest',
         debug: true,
         bootstrap: function (wallaby) {

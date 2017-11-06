@@ -19,12 +19,12 @@ In that case there are two things you can do:
 The Destroy decorator covers that logic for you.
 
 ```
-import {Destroy} from 'ngx-reactiveToolkit';
+import {Destroy, RxComponent} from 'ngx-reactiveToolkit';
 @Component({
     selector: 'my-component',
     template: `...`,
 })
-export class HelloComponent {
+export class HelloComponent extends RxComponent {
     // by using the @Destroy annotation a stream will be created for you
     // and will get a true value when the component gets destroyed
     @Destroy() destroy$;
@@ -47,12 +47,12 @@ reactive code in dumb components as well.
 The changes decorator covers that logic for you.
 
 ```
-import {Changes} from 'ngx-reactiveToolkit';
+import {Changes, RxComponent} from 'ngx-reactiveToolkit';
 @Component({
     selector: 'my-component',
     template: `...`,
 })
-export class HelloComponent {
+export class HelloComponent extends RxComponent {
     @Input() a;
     @Input() b;
     // by using the @Changes annotation a stream will be created for you

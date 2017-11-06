@@ -1,12 +1,12 @@
 {
   "name": "ngx-reactivetoolkit",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "",
   "main": "index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "test": "NODE_ENV=test jest --no-cache --coverage",
-    "build": "ngc",
+    "build": "node_modules/.bin/ngc",
     "deploy": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cd dist && npm publish"
   },
   "repository": {
@@ -24,6 +24,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.ts",
+      "!src/index.ts",
       "!**/node_modules/**"
     ],
     "coverageReporters": [
@@ -50,8 +51,8 @@
     "rxjs": "^5.4.3"
   },
   "devDependencies": {
-    "@angular/compiler": "^4.4.1",
-    "@angular/compiler-cli": "^4.4.1",
+    "@angular/compiler": "^4.4.3",
+    "@angular/compiler-cli": "^4.4.3",
     "@types/jest": "^20.0.8",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",

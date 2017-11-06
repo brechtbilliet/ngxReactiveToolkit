@@ -2,6 +2,7 @@ import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs';
 import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
@@ -23,16 +24,39 @@ import { Observable } from 'rxjs/Observable';
 */
 
 export function Destroy() {
-    return function (target: any, key: string) {
-        const subject = new Subject();
-        target[key] = subject.asObservable();
-        const oldNgOnDestroy = target.ngOnDestroy;
-        target.ngOnDestroy = () => {
-            if (oldNgOnDestroy) {
-                oldNgOnDestroy.call(target)
+    return function(target: any, key: string) {
+        const oldNgOnDestroy = target.constructor.prototype.ngOnDestroy;
+        if (!oldNgOnDestroy) {
+            throw new Error(`ngOnDestroy must be implemented for ${target.constructor.name}`);
+        }
+
+        const accessor = `${key}$`;
+        const secret = `_${key}$`;
+
+        Object.defineProperty(target, accessor, {
+            get: function() {
+                if (this[secret]) {
+                    return this[secret];
+                }
+                this[secret] = new Subject();
+                return this[secret];
             }
-            subject.next(true);
-            subject.complete();
+        });
+        Object.defineProperty(target, key, {
+            get: function () {
+                return this[accessor];
+            },
+            set: function() {
+                throw new Error('You cannot set this property in the Component if you use @Destroy');
+            }
+        });
+
+        target.constructor.prototype.ngOnDestroy = function () {
+            if (oldNgOnDestroy) {
+                oldNgOnDestroy.apply(this, arguments)
+            }
+            this[accessor].next(true);
+            this[accessor].complete();
         }
     }
 }
@@ -52,52 +76,46 @@ export function Destroy() {
         }
     }
 */
+
 export function Changes(inputProp?: string) {
     return function (target: any, key: string) {
-        const subject = new Subject();
-        target[key] = inputProp ? subject
-            .filter(changes => !!changes && changes[inputProp] && changes[inputProp].currentValue)
-            .map(changes => changes[inputProp].currentValue) : subject.asObservable();
-        const oldNgOnChanges = target.ngOnChanges;
-        if (!target._subjectsToNext) {
-            target._subjectsToNext = [];
+        function getStream(){
+            const subject = new ReplaySubject(1);
+            return inputProp ? subject
+                .filter(changes => !!changes && changes[inputProp] && changes[inputProp].currentValue)
+                .map(changes => changes[inputProp].currentValue) : subject;
         }
-        target._subjectsToNext.push(subject);
-        target.ngOnChanges = (simpleChanges: SimpleChanges) => {
-            if (oldNgOnChanges) {
-                oldNgOnChanges();
+        const oldNgOnChanges = target.constructor.prototype.ngOnChanges;
+        if (!oldNgOnChanges) {
+            throw new Error(`ngOnChanges must be implemented for ${target.constructor.name}`);
+        }
+
+        const accessor = `${key}$`;
+        const secret = `_${key}$`;
+
+        Object.defineProperty(target, accessor, {
+            get: function() {
+                if (this[secret]) {
+                    return this[secret];
+                }
+                this[secret] = getStream();
+                return this[secret];
             }
-            target._subjectsToNext.forEach(sub => sub.next(simpleChanges));
-        }
-    }
-}
-
-/*
-    @Component({
-      selector: 'my-component',
-      template: `
-        <detail [detail]="..." (remove)="remove$.bind($event)"></detail>
-      `
-    })
-    export class MyComponent {
-      @ObserveOutput() remove$: Observable<string>;
-    }
- */
-export class BindableObservable<T> extends Observable<T> {
-    static create<T>(): BindableObservable<T> {
-        let observer;
-        const stream$ = Observable.create((obs) => {
-            observer = obs;
         });
-        stream$.bind = (e) => {
-            observer && observer.next(e);
-        };
-        return stream$;
-    }
-}
+        Object.defineProperty(target, key, {
+            get: function () {
+                return this[accessor];
+            },
+            set: function() {
+                throw new Error('You cannot set this property in the Component if you use @Changes');
+            }
+        });
 
-export function ObserveOutput() {
-    return function(target: any, key: string) {
-        target[key] = BindableObservable.create();
+        target.ngOnChanges = function (simpleChanges: SimpleChanges) {
+            if (oldNgOnChanges) {
+                oldNgOnChanges.apply(this, [simpleChanges]);
+            }
+            this[accessor].next(simpleChanges);
+        }
     }
 }
