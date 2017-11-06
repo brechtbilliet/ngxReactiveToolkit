@@ -1,6 +1,6 @@
 {
   "name": "ngx-reactivetoolkit",
-  "version": "1.0.11",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -48,7 +48,7 @@
   "dependencies": {
     "@angular/core": "^4.3.6",
     "reflect-metadata": "^0.1.10",
-    "rxjs": "^5.4.3"
+    "rxjs": "^5.5.2"
   },
   "devDependencies": {
     "@angular/compiler": "^4.4.3",
@@ -60,5 +60,8 @@
     "jest-cli": "^21.1.0",
     "rimraf": "^2.6.2",
     "typescript": "^2.5.2"
+  },
+  "peerDependencies": {
+    "rxjs": "^5.5.2"
   }
 }

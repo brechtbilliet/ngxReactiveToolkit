@@ -1,7 +1,7 @@
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 // These decorators are all about utils to turn lifecycle events into streams
