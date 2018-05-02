@@ -7,6 +7,14 @@ The toolkit is pretty small for now and only comes with a handful of helpers and
 It will get updated in the future to help us even more. If you want to contribute or have great ideas...
 Please do not hesitate to request changes.
 
+## Installation
+
+```bash
+npm install --save ngx-reactivetoolkit
+```
+
+## Documentation
+
 ### The Destroy decorator
 
 When using streams in angular you have to make sure that you are unsubscribing to your streams.
