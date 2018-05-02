@@ -26,7 +26,7 @@ In that case there are two things you can do:
 
 The Destroy decorator covers that logic for you.
 
-```
+```javascript
 import {Destroy, RxComponent} from 'ngx-reactiveToolkit';
 @Component({
     selector: 'my-component',
@@ -54,7 +54,7 @@ reactive code in dumb components as well.
 
 The changes decorator covers that logic for you.
 
-```
+```javascript
 import {Changes, RxComponent} from 'ngx-reactiveToolkit';
 @Component({
     selector: 'my-component',
@@ -76,7 +76,8 @@ export class HelloComponent extends RxComponent {
 ```
 
 You could also pass the name of an input to create a stream directly from that input.
-```
+
+```javascript
 import {Changes} from 'ngx-reactiveToolkit';
 @Component({
     selector: 'my-component',
