@@ -7,6 +7,14 @@ The toolkit is pretty small for now and only comes with a handful of helpers and
 It will get updated in the future to help us even more. If you want to contribute or have great ideas...
 Please do not hesitate to request changes.
 
+## Installation
+
+```bash
+npm install --save ngx-reactivetoolkit
+```
+
+## Documentation
+
 ### The Destroy decorator
 
 When using streams in angular you have to make sure that you are unsubscribing to your streams.
@@ -18,8 +26,9 @@ In that case there are two things you can do:
 
 The Destroy decorator covers that logic for you.
 
-```
-import {Destroy, RxComponent} from 'ngx-reactiveToolkit';
+```javascript
+import {Destroy, RxComponent} from 'ngx-reactivetoolkit';
+
 @Component({
     selector: 'my-component',
     template: `...`,
@@ -46,8 +55,9 @@ reactive code in dumb components as well.
 
 The changes decorator covers that logic for you.
 
-```
-import {Changes, RxComponent} from 'ngx-reactiveToolkit';
+```javascript
+import {Changes, RxComponent} from 'ngx-reactivetoolkit';
+
 @Component({
     selector: 'my-component',
     template: `...`,
@@ -68,8 +78,10 @@ export class HelloComponent extends RxComponent {
 ```
 
 You could also pass the name of an input to create a stream directly from that input.
-```
-import {Changes} from 'ngx-reactiveToolkit';
+
+```javascript
+import {Changes} from 'ngx-reactivetoolkit';
+
 @Component({
     selector: 'my-component',
     template: `...`,
