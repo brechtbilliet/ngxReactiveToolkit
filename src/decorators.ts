@@ -85,7 +85,7 @@ export function Changes(inputProp?: string) {
             const subject = new ReplaySubject(1);
             return inputProp ? subject
                 .pipe(
-                  filter(changes => !!changes && changes[inputProp] && changes[inputProp].currentValue),
+                  filter(changes => !!changes && changes[inputProp]),
                   map(changes => changes[inputProp].currentValue)
                 ) : subject;
         }

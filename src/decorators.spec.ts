@@ -34,6 +34,7 @@ describe('on Destroy decorator', () => {
         instance['ngOnDestroy']();
         expect(instance.oldFnCalled).toEqual(true);
     });
+
     it('should work with multiple instances', () => {
         class MyComponent implements OnDestroy {
             @Destroy() destroy$;
@@ -52,6 +53,7 @@ describe('on Destroy decorator', () => {
         expect(instance1DestroyResults).toEqual([true]);
         expect(instance2DestroyResults).toEqual([]);
     });
+
     describe('given the ngOnDestroy is not implemented', () => {
         it('should throw an error', () => {
             expect(() => {
@@ -61,6 +63,7 @@ describe('on Destroy decorator', () => {
             }).toThrowError('ngOnDestroy must be implemented for MyComponent');
         });
     });
+
     describe('given we try to set the value of destroy$ ourselves', () => {
         it('should throw an error', () => {
             expect(() => {
@@ -87,6 +90,7 @@ describe('on Changes decorator', () => {
             }).toThrowError('ngOnChanges must be implemented for MyComponent');
         });
     });
+
     describe('given there is no key specified', () => {
         it('should have created a changes stream that contains the changes of all inputs and still' +
             'executes the old ngOnchanges function', () => {
@@ -129,6 +133,7 @@ describe('on Changes decorator', () => {
             expect(results[1]).toBe(simpleChanges2);
         });
     });
+
     describe('given there is a key specified', () => {
         it('should only listen to the changes of that input', () => {
             class MyComponent implements OnChanges {
@@ -169,6 +174,7 @@ describe('on Changes decorator', () => {
             expect(results[1]).toEqual(simpleChanges3.foo.currentValue);
         });
     });
+
     it('should handle multiple instances', () => {
         class MyComponent implements OnChanges {
             @Changes('foo') foo$;
@@ -195,8 +201,92 @@ describe('on Changes decorator', () => {
         instance.ngOnChanges(simpleChanges as any);
         expect(instance1Results).toEqual([[1, 2, 3]]);
         expect(instance2Results).toEqual([]);
-
     });
+
+    it('should handle undefined', () => {
+        class MyComponent implements OnChanges {
+          @Changes('foo') foo$;
+          oldFnCalledWithChanges = null;
+
+          ngOnChanges(changes: SimpleChanges): void {
+            this.oldFnCalledWithChanges = changes;
+          }
+        }
+
+        const instance = new MyComponent();
+        const instance2 = new MyComponent();
+        const simpleChanges = {
+          foo: {
+            currentValue: undefined,
+            previousValue: 'fake-value'
+          }
+
+        };
+        const instance1Results = [];
+        const instance2Results = [];
+        instance.foo$.subscribe(change => instance1Results.push(change));
+        instance2.foo$.subscribe(change => instance2Results.push(change));
+        instance.ngOnChanges(simpleChanges as any);
+        expect(instance1Results).toEqual([undefined]);
+        expect(instance2Results).toEqual([]);
+    });
+
+    it('should handle null', () => {
+        class MyComponent implements OnChanges {
+          @Changes('foo') foo$;
+          oldFnCalledWithChanges = null;
+
+          ngOnChanges(changes: SimpleChanges): void {
+            this.oldFnCalledWithChanges = changes;
+          }
+        }
+
+        const instance = new MyComponent();
+        const instance2 = new MyComponent();
+        const simpleChanges = {
+          foo: {
+            currentValue: null,
+            previousValue: 'fake-value'
+          }
+
+        };
+        const instance1Results = [];
+        const instance2Results = [];
+        instance.foo$.subscribe(change => instance1Results.push(change));
+        instance2.foo$.subscribe(change => instance2Results.push(change));
+        instance.ngOnChanges(simpleChanges as any);
+        expect(instance1Results).toEqual([null]);
+        expect(instance2Results).toEqual([]);
+    });
+
+    it('should handle zero', () => {
+        class MyComponent implements OnChanges {
+          @Changes('foo') foo$;
+          oldFnCalledWithChanges = null;
+
+          ngOnChanges(changes: SimpleChanges): void {
+            this.oldFnCalledWithChanges = changes;
+          }
+        }
+
+        const instance = new MyComponent();
+        const instance2 = new MyComponent();
+        const simpleChanges = {
+          foo: {
+            currentValue: 0,
+            previousValue: 'fake-value'
+          }
+
+        };
+        const instance1Results = [];
+        const instance2Results = [];
+        instance.foo$.subscribe(change => instance1Results.push(change));
+        instance2.foo$.subscribe(change => instance2Results.push(change));
+        instance.ngOnChanges(simpleChanges as any);
+        expect(instance1Results).toEqual([0]);
+        expect(instance2Results).toEqual([]);
+    });
+
     describe('given we try to set the value of change$ ourselves', () => {
         it('should throw an error', () => {
             expect(() => {
