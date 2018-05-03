@@ -1,10 +1,7 @@
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import {
-  filter,
-  map
-} from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
@@ -26,41 +23,45 @@ import {
 */
 
 export function Destroy() {
-    return function(target: any, key: string) {
-        const oldNgOnDestroy = target.constructor.prototype.ngOnDestroy;
-        if (!oldNgOnDestroy) {
-            throw new Error(`ngOnDestroy must be implemented for ${target.constructor.name}`);
-        }
-
-        const accessor = `${key}$`;
-        const secret = `_${key}$`;
-
-        Object.defineProperty(target, accessor, {
-            get: function() {
-                if (this[secret]) {
-                    return this[secret];
-                }
-                this[secret] = new Subject();
-                return this[secret];
-            }
-        });
-        Object.defineProperty(target, key, {
-            get: function () {
-                return this[accessor];
-            },
-            set: function() {
-                throw new Error('You cannot set this property in the Component if you use @Destroy');
-            }
-        });
-
-        target.constructor.prototype.ngOnDestroy = function () {
-            if (oldNgOnDestroy) {
-                oldNgOnDestroy.apply(this, arguments)
-            }
-            this[accessor].next(true);
-            this[accessor].complete();
-        }
+  return function(target: any, key: string) {
+    const oldNgOnDestroy = target.constructor.prototype.ngOnDestroy;
+    if (!oldNgOnDestroy) {
+      throw new Error(
+        `ngOnDestroy must be implemented for ${target.constructor.name}`
+      );
     }
+
+    const accessor = `${key}$`;
+    const secret = `_${key}$`;
+
+    Object.defineProperty(target, accessor, {
+      get: function() {
+        if (this[secret]) {
+          return this[secret];
+        }
+        this[secret] = new Subject();
+        return this[secret];
+      }
+    });
+    Object.defineProperty(target, key, {
+      get: function() {
+        return this[accessor];
+      },
+      set: function() {
+        throw new Error(
+          'You cannot set this property in the Component if you use @Destroy'
+        );
+      }
+    });
+
+    target.constructor.prototype.ngOnDestroy = function() {
+      if (oldNgOnDestroy) {
+        oldNgOnDestroy.apply(this, arguments);
+      }
+      this[accessor].next(true);
+      this[accessor].complete();
+    };
+  };
 }
 
 /*
@@ -80,46 +81,52 @@ export function Destroy() {
 */
 
 export function Changes(inputProp?: string) {
-    return function (target: any, key: string) {
-        function getStream(){
-            const subject = new ReplaySubject(1);
-            return inputProp ? subject
-                .pipe(
-                  filter(changes => !!changes && changes[inputProp]),
-                  map(changes => changes[inputProp].currentValue)
-                ) : subject;
-        }
-        const oldNgOnChanges = target.constructor.prototype.ngOnChanges;
-        if (!oldNgOnChanges) {
-            throw new Error(`ngOnChanges must be implemented for ${target.constructor.name}`);
-        }
-
-        const accessor = `${key}$`;
-        const secret = `_${key}$`;
-
-        Object.defineProperty(target, accessor, {
-            get: function() {
-                if (this[secret]) {
-                    return this[secret];
-                }
-                this[secret] = getStream();
-                return this[secret];
-            }
-        });
-        Object.defineProperty(target, key, {
-            get: function () {
-                return this[accessor];
-            },
-            set: function() {
-                throw new Error('You cannot set this property in the Component if you use @Changes');
-            }
-        });
-
-        target.ngOnChanges = function (simpleChanges: SimpleChanges) {
-            if (oldNgOnChanges) {
-                oldNgOnChanges.apply(this, [simpleChanges]);
-            }
-            this[accessor].next(simpleChanges);
-        }
+  return function(target: any, key: string) {
+    function getStream() {
+      const subject = new ReplaySubject(1);
+      return inputProp
+        ? subject.pipe(
+            filter(changes => !!changes && changes[inputProp]),
+            map(changes => changes[inputProp].currentValue)
+          )
+        : subject;
     }
+
+    const oldNgOnChanges = target.constructor.prototype.ngOnChanges;
+    if (!oldNgOnChanges) {
+      throw new Error(
+        `ngOnChanges must be implemented for ${target.constructor.name}`
+      );
+    }
+
+    const accessor = `${key}$`;
+    const secret = `_${key}$`;
+
+    Object.defineProperty(target, accessor, {
+      get: function() {
+        if (this[secret]) {
+          return this[secret];
+        }
+        this[secret] = getStream();
+        return this[secret];
+      }
+    });
+    Object.defineProperty(target, key, {
+      get: function() {
+        return this[accessor];
+      },
+      set: function() {
+        throw new Error(
+          'You cannot set this property in the Component if you use @Changes'
+        );
+      }
+    });
+
+    target.ngOnChanges = function(simpleChanges: SimpleChanges) {
+      if (oldNgOnChanges) {
+        oldNgOnChanges.apply(this, [simpleChanges]);
+      }
+      this[accessor].next(simpleChanges);
+    };
+  };
 }
