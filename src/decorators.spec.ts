@@ -1,6 +1,6 @@
 import { Changes, Destroy } from './decorators';
 import { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 describe('on Destroy decorator', () => {
   it('should create a destroy stream and next true in it (and complete it) when the component gets destroyed', () => {
