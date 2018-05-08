@@ -15,6 +15,15 @@ npm install --save ngx-reactivetoolkit
 
 ## Documentation
 
+### Versions
+
+**Angular 6**: 4.x.x
+
+**Angular 5**: 3.x.x, 2.x.x and 1.x.x
+
+**Angular 4**: 3.x.x, 2.x.x and 1.x.x
+
+
 ### The Destroy decorator
 
 When using streams in angular you have to make sure that you are unsubscribing to your streams.
