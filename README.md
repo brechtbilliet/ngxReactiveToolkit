@@ -54,7 +54,7 @@ export class HelloComponent implements OnDestroy {
         ).subscribe(e => console.log(e));
     }
 
-    // because of aot we need to implement the ngOnDestroy method for @Changes to work
+    // because of aot we need to implement the ngOnDestroy method for @Destroy to work
     ngOnDestroy(): void {}
 }
 ```
