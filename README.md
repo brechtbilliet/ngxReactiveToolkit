@@ -36,23 +36,26 @@ In that case there are two things you can do:
 The Destroy decorator covers that logic for you.
 
 ```javascript
-import {Destroy, RxComponent} from 'ngx-reactivetoolkit';
+import {Destroy} from 'ngx-reactivetoolkit';
 
 @Component({
     selector: 'my-component',
     template: `...`,
 })
-export class HelloComponent extends RxComponent {
+export class HelloComponent implements OnDestroy {
     // by using the @Destroy annotation a stream will be created for you
     // and will get a true value when the component gets destroyed
     @Destroy() destroy$;
 
     constructor() {
-        Observable.interval(500)
+        interval(500).pipe(
             // be safe and use the created destroy$ to stop the stream automatically
-            .takeUntil(this.destroy$)
-            .subscribe(e => console.log(e));
+            takeUntil(this.destroy$)
+        ).subscribe(e => console.log(e));
     }
+
+    // because of aot we need to implement the ngOnDestroy method for @Changes to work
+    ngOnDestroy(): void {}
 }
 ```
 
@@ -65,13 +68,13 @@ reactive code in dumb components as well.
 The changes decorator covers that logic for you.
 
 ```javascript
-import {Changes, RxComponent} from 'ngx-reactivetoolkit';
+import {Changes} from 'ngx-reactivetoolkit';
 
 @Component({
     selector: 'my-component',
     template: `...`,
 })
-export class HelloComponent extends RxComponent {
+export class HelloComponent implements OnChanges {
     @Input() a;
     @Input() b;
     // by using the @Changes annotation a stream will be created for you
@@ -83,6 +86,9 @@ export class HelloComponent extends RxComponent {
     }
     a$ = this.changes$.filter(changes => changes.a).map(changes => changes.a.currentValue);
     b$ = this.changes$.filter(changes => changes.b).map(changes => changes.b.currentValue);
+
+    // because of aot we need to implement the ngOnChanges method for @Changes to work
+    ngOnChanges(): void {}
 }
 ```
 
@@ -95,10 +101,13 @@ import {Changes} from 'ngx-reactivetoolkit';
     selector: 'my-component',
     template: `...`,
 })
-export class HelloComponent {
+export class HelloComponent implements OnChanges {
     @Input() a;
     @Input() b;
     @Changes('a') a$; // will get nexted every time a changes
     @Changes('b') b$; // will get nexted every time b changes
+
+    // because of aot we need to implement the ngOnChanges method for @Changes to work
+    ngOnChanges(): void {}
 }
 ```
