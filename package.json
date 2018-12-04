@@ -1,14 +1,18 @@
 {
   "name": "ngx-reactivetoolkit",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prebuild": "rimraf dist",
     "test": "NODE_ENV=test jest --no-cache --coverage",
     "build": "node_modules/.bin/ngc",
-    "deploy": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cd dist && npm publish",
-    "precommit": "pretty-quick --staged"
+    "deploy": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cd dist && npm publish"
+  },
+  "husky": {
+    "hooks": {
+      "prebuild": "rimraf dist",
+      "precommit": "pretty-quick --staged"
+    }
   },
   "repository": {
     "type": "git",
@@ -47,20 +51,21 @@
     "testRegex": "(/src/.*\\.(spec.ts))$"
   },
   "dependencies": {
-    "@angular/core": "^6.0.0",
-    "rxjs": "^6.0.0",
+    "@angular/core": "^7.1.1",
+    "rxjs": "^6.3.3",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular/compiler": "^6.0.0",
-    "@angular/compiler-cli": "^6.0.0",
-    "@types/jest": "^20.0.8",
-    "husky": "^0.14.3",
-    "jest": "^21.1.0",
-    "jest-cli": "^21.1.0",
-    "prettier": "^1.12.1",
-    "pretty-quick": "^1.4.1",
+    "@angular-devkit/schematics": "^7.1.1",
+    "@angular/compiler": "^7.1.1",
+    "@angular/compiler-cli": "^7.1.1",
+    "@types/jest": "^23.3.10",
+    "husky": "^1.2.0",
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0",
+    "prettier": "^1.15.3",
+    "pretty-quick": "^1.8.0",
     "rimraf": "^2.6.2",
-    "typescript": "~2.7.2"
+    "typescript": "~3.1.6"
   }
 }
