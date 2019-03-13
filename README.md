@@ -37,6 +37,8 @@ In that case there are two things you can do:
 
 The Destroy decorator covers that logic for you.
 
+An cleaner alternative to the destroy decorator is the takeUntilDestroy operator also available in this library.
+
 ```javascript
 import {Destroy} from 'ngx-reactivetoolkit';
 
@@ -111,5 +113,38 @@ export class HelloComponent implements OnChanges {
 
     // because of aot we need to implement the ngOnChanges method for @Changes to work
     ngOnChanges(): void {}
+}
+```
+
+### The takeUntilDestroy operator
+
+The takeUntilDestroy operator is a cleaner alternative over the destroy decorator. The implementation is inspired by Netanel Basal his take on it.
+
+When using streams in angular you have to make sure that you are unsubscribing to your streams.
+When using async pipes those particular streams are already getting unsubscribed for you automatically.
+But in a bunch of cases it is still needed to subscribe to streams at component level.
+In that case there are two things you can do:
+- Keep track of all subscriptions and destroy them at ngOnDestroy
+- Keep track of a destroy stream and use the takeUntil operator
+
+The takeUntilDestroy operator covers that logic for you.
+
+```javascript
+import {takeUntilDestroy} from 'ngx-reactivetoolkit';
+
+@Component({
+    selector: 'my-component',
+    template: `...`,
+})
+export class HelloComponent implements OnDestroy {
+    constructor() {
+        interval(500).pipe(
+            // be safe and use the created destroy$ to stop the stream automatically
+            takeUntilDestroy(this)
+        ).subscribe(e => console.log(e));
+    }
+
+    // because of aot we need to implement the ngOnDestroy method for @Destroy to work
+    ngOnDestroy(): void {}
 }
 ```
