@@ -82,16 +82,12 @@ export function Destroy() {
 export function Changes(inputProp?: string, initialValue?: any) {
   return function(target: any, key: string) {
     function getStream() {
-      const __subject = new ReplaySubject(1);
-      const subject = inputProp
-        ? __subject.pipe(
-            filter(changes => !!changes && changes[inputProp]),
-            map(changes => changes[inputProp].currentValue)
-          )
-        : __subject;
-
-      return initialValue !== undefined 
-        ? subject.pipe(startWith(initialValue)) 
+      const subject = new ReplaySubject(1);
+      return inputProp
+        ? subject.pipe(
+          filter(changes => !!changes && changes[inputProp]),
+          map(changes => changes[inputProp].currentValue)
+        )
         : subject;
     }
 
@@ -116,7 +112,9 @@ export function Changes(inputProp?: string, initialValue?: any) {
     });
     Object.defineProperty(target, key, {
       get: function() {
-        return this[accessor];
+        return initialValue !== undefined
+          ? this[accessor].pipe(startWith(initialValue))
+          : this[accessor].asObservable();
       },
       set: function() {
         throw new Error(
@@ -133,3 +131,4 @@ export function Changes(inputProp?: string, initialValue?: any) {
     };
   };
 }
+
