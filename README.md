@@ -98,7 +98,7 @@ export class HelloComponent implements OnChanges {
 }
 ```
 
-You could also pass the name of an input to create a stream directly from that input.
+You could also pass the name of an input to create a stream directly from that input as well as define a starting value.
 
 ```javascript
 import {Changes} from 'ngx-reactivetoolkit';
@@ -111,7 +111,7 @@ export class HelloComponent implements OnChanges {
     @Input() a;
     @Input() b;
     @Changes('a') a$; // will get nexted every time a changes
-    @Changes('b') b$; // will get nexted every time b changes
+    @Changes('b', 100) b$; // will get nexted every time b changes, and will start with the value 100 
 
     // because of aot we need to implement the ngOnChanges method for @Changes to work
     ngOnChanges(): void {}

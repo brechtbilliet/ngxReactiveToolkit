@@ -1,6 +1,6 @@
 import { SimpleChanges } from '@angular/core';
 import { Subject, ReplaySubject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
@@ -79,15 +79,19 @@ export function Destroy() {
     }
 */
 
-export function Changes(inputProp?: string) {
+export function Changes(inputProp?: string, initialValue?: any) {
   return function(target: any, key: string) {
     function getStream() {
-      const subject = new ReplaySubject(1);
-      return inputProp
-        ? subject.pipe(
+      const __subject = new ReplaySubject(1);
+      const subject = inputProp
+        ? __subject.pipe(
             filter(changes => !!changes && changes[inputProp]),
             map(changes => changes[inputProp].currentValue)
           )
+        : __subject;
+
+      return initialValue !== undefined 
+        ? subject.pipe(startWith(initialValue)) 
         : subject;
     }
 
