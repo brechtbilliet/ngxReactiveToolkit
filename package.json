@@ -50,7 +50,7 @@
     },
     "testRegex": "(/src/.*\\.(spec.ts))$"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@angular/core": "^8.1.1",
     "rxjs": "^6.5.2",
     "zone.js": "~0.9.1"
