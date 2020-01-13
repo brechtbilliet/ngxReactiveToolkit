@@ -59,6 +59,7 @@
     "@angular-devkit/schematics": "^8.1.1",
     "@angular/compiler": "^8.1.1",
     "@angular/compiler-cli": "^8.1.1",
+    "@angular/core": "^8.1.1",
     "@types/jest": "^24.0.15",
     "husky": "^3.0.0",
     "jest": "^24.8.0",
@@ -66,6 +67,8 @@
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
     "rimraf": "^2.6.3",
-    "typescript": "~3.4.5"
+    "rxjs": "^6.5.2",
+    "typescript": "~3.4.5",
+    "zone.js": "~0.9.1"
   }
 }
