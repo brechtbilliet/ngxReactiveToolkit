@@ -17,7 +17,8 @@ npm install --save ngx-reactivetoolkit
 
 ### Versions
 
-**Angular 8**: 6.x.x
+
+**Angular 8**: 7.x.x, 6.x.x
 
 **Angular 7**: 5.x.x
 
