@@ -1,5 +1,6 @@
 {
   "singleQuote": true,
   "parser": "typescript",
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "arrowParens": "avoid"
 }

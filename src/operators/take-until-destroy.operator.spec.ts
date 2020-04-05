@@ -13,7 +13,7 @@ describe('operator: takeUntilDestroy', () => {
 
       const instance = new MyComponent();
       const results = [];
-      instance['__takeUntilDestroy$'].subscribe((r) => results.push(r));
+      instance['__takeUntilDestroy$'].subscribe(r => results.push(r));
       expect(results.length).toBe(0);
       instance.ngOnDestroy();
       instance.ngOnDestroy();
@@ -46,10 +46,10 @@ describe('operator: takeUntilDestroy', () => {
       const instance2DestroyResults = [];
       const instance = new MyComponent();
       const instance2 = new MyComponent();
-      instance['__takeUntilDestroy$'].subscribe((r) =>
+      instance['__takeUntilDestroy$'].subscribe(r =>
         instance1DestroyResults.push(r)
       );
-      instance2['__takeUntilDestroy$'].subscribe((r) =>
+      instance2['__takeUntilDestroy$'].subscribe(r =>
         instance2DestroyResults.push(r)
       );
       instance['ngOnDestroy']();
