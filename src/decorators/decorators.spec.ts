@@ -110,22 +110,22 @@ describe('on Changes decorator', () => {
         const simpleChanges = {
           foo: {
             currentValue: [],
-            previousValue: undefined,
+            previousValue: undefined
           },
           bar: {
             currentValue: [],
-            previousValue: undefined,
-          },
+            previousValue: undefined
+          }
         };
         const simpleChanges2 = {
           foo: {
             currentValue: [1, 2, 3],
-            previousValue: undefined,
+            previousValue: undefined
           },
           bar: {
             currentValue: [4, 5, 6],
-            previousValue: undefined,
-          },
+            previousValue: undefined
+          }
         };
         instance.ngOnChanges(simpleChanges as any);
         instance.ngOnChanges(simpleChanges2 as any);
@@ -153,20 +153,20 @@ describe('on Changes decorator', () => {
       const simpleChanges = {
         foo: {
           currentValue: [1, 2, 3],
-          previousValue: undefined,
-        },
+          previousValue: undefined
+        }
       };
       const simpleChanges2 = {
         bar: {
           currentValue: [4, 5, 6],
-          previousValue: undefined,
-        },
+          previousValue: undefined
+        }
       };
       const simpleChanges3 = {
         foo: {
           currentValue: [4, 5, 6],
-          previousValue: undefined,
-        },
+          previousValue: undefined
+        }
       };
       instance.ngOnChanges(simpleChanges as any);
       instance.ngOnChanges(simpleChanges2 as any);
@@ -191,8 +191,8 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: [1, 2, 3],
-        previousValue: undefined,
-      },
+        previousValue: undefined
+      }
     };
     const instance1Results = [];
     const instance2Results = [];
@@ -218,8 +218,8 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: undefined,
-        previousValue: 'fake-value',
-      },
+        previousValue: 'fake-value'
+      }
     };
     const instance1Results = [];
     const instance2Results = [];
@@ -245,8 +245,8 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: null,
-        previousValue: 'fake-value',
-      },
+        previousValue: 'fake-value'
+      }
     };
     const instance1Results = [];
     const instance2Results = [];
@@ -272,8 +272,8 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: 0,
-        previousValue: 'fake-value',
-      },
+        previousValue: 'fake-value'
+      }
     };
     const instance1Results = [];
     const instance2Results = [];

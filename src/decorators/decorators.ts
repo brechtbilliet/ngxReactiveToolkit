@@ -40,7 +40,7 @@ export function Destroy() {
         }
         this[secret] = new Subject();
         return this[secret];
-      },
+      }
     });
     Object.defineProperty(target, key, {
       get: function () {
@@ -50,7 +50,7 @@ export function Destroy() {
         throw new Error(
           'You cannot set this property in the Component if you use @Destroy'
         );
-      },
+      }
     });
 
     target.constructor.prototype.ngOnDestroy = function () {
@@ -108,7 +108,7 @@ export function Changes(inputProp?: string, initialValue?: any) {
         }
         this[secret] = getStream();
         return this[secret];
-      },
+      }
     });
     Object.defineProperty(target, key, {
       get: function () {
@@ -120,7 +120,7 @@ export function Changes(inputProp?: string, initialValue?: any) {
         throw new Error(
           'You cannot set this property in the Component if you use @Changes'
         );
-      },
+      }
     });
 
     target.ngOnChanges = function (simpleChanges: SimpleChanges) {
