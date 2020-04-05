@@ -12,7 +12,7 @@ describe('on Destroy decorator', () => {
 
     const instance = new MyComponent();
     const results = [];
-    instance.destroy$.subscribe(r => results.push(r));
+    instance.destroy$.subscribe((r) => results.push(r));
     expect(results.length).toBe(0);
     instance['ngOnDestroy']();
     instance['ngOnDestroy']();
@@ -45,8 +45,8 @@ describe('on Destroy decorator', () => {
     const instance2DestroyResults = [];
     const instance = new MyComponent();
     const instance2 = new MyComponent();
-    instance.destroy$.subscribe(r => instance1DestroyResults.push(r));
-    instance2.destroy$.subscribe(r => instance2DestroyResults.push(r));
+    instance.destroy$.subscribe((r) => instance1DestroyResults.push(r));
+    instance2.destroy$.subscribe((r) => instance2DestroyResults.push(r));
     instance['ngOnDestroy']();
     expect(instance1DestroyResults).toEqual([true]);
     expect(instance2DestroyResults).toEqual([]);
@@ -106,26 +106,26 @@ describe('on Changes decorator', () => {
 
         const instance = new MyComponent();
         const results = [];
-        instance.changes$.subscribe(change => results.push(change));
+        instance.changes$.subscribe((change) => results.push(change));
         const simpleChanges = {
           foo: {
             currentValue: [],
-            previousValue: undefined
+            previousValue: undefined,
           },
           bar: {
             currentValue: [],
-            previousValue: undefined
-          }
+            previousValue: undefined,
+          },
         };
         const simpleChanges2 = {
           foo: {
             currentValue: [1, 2, 3],
-            previousValue: undefined
+            previousValue: undefined,
           },
           bar: {
             currentValue: [4, 5, 6],
-            previousValue: undefined
-          }
+            previousValue: undefined,
+          },
         };
         instance.ngOnChanges(simpleChanges as any);
         instance.ngOnChanges(simpleChanges2 as any);
@@ -149,24 +149,24 @@ describe('on Changes decorator', () => {
 
       const instance = new MyComponent();
       const results = [];
-      instance.foo$.subscribe(change => results.push(change));
+      instance.foo$.subscribe((change) => results.push(change));
       const simpleChanges = {
         foo: {
           currentValue: [1, 2, 3],
-          previousValue: undefined
-        }
+          previousValue: undefined,
+        },
       };
       const simpleChanges2 = {
         bar: {
           currentValue: [4, 5, 6],
-          previousValue: undefined
-        }
+          previousValue: undefined,
+        },
       };
       const simpleChanges3 = {
         foo: {
           currentValue: [4, 5, 6],
-          previousValue: undefined
-        }
+          previousValue: undefined,
+        },
       };
       instance.ngOnChanges(simpleChanges as any);
       instance.ngOnChanges(simpleChanges2 as any);
@@ -191,13 +191,13 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: [1, 2, 3],
-        previousValue: undefined
-      }
+        previousValue: undefined,
+      },
     };
     const instance1Results = [];
     const instance2Results = [];
-    instance.foo$.subscribe(change => instance1Results.push(change));
-    instance2.foo$.subscribe(change => instance2Results.push(change));
+    instance.foo$.subscribe((change) => instance1Results.push(change));
+    instance2.foo$.subscribe((change) => instance2Results.push(change));
     instance.ngOnChanges(simpleChanges as any);
     expect(instance1Results).toEqual([[1, 2, 3]]);
     expect(instance2Results).toEqual([]);
@@ -218,13 +218,13 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: undefined,
-        previousValue: 'fake-value'
-      }
+        previousValue: 'fake-value',
+      },
     };
     const instance1Results = [];
     const instance2Results = [];
-    instance.foo$.subscribe(change => instance1Results.push(change));
-    instance2.foo$.subscribe(change => instance2Results.push(change));
+    instance.foo$.subscribe((change) => instance1Results.push(change));
+    instance2.foo$.subscribe((change) => instance2Results.push(change));
     instance.ngOnChanges(simpleChanges as any);
     expect(instance1Results).toEqual([undefined]);
     expect(instance2Results).toEqual([]);
@@ -245,13 +245,13 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: null,
-        previousValue: 'fake-value'
-      }
+        previousValue: 'fake-value',
+      },
     };
     const instance1Results = [];
     const instance2Results = [];
-    instance.foo$.subscribe(change => instance1Results.push(change));
-    instance2.foo$.subscribe(change => instance2Results.push(change));
+    instance.foo$.subscribe((change) => instance1Results.push(change));
+    instance2.foo$.subscribe((change) => instance2Results.push(change));
     instance.ngOnChanges(simpleChanges as any);
     expect(instance1Results).toEqual([null]);
     expect(instance2Results).toEqual([]);
@@ -272,13 +272,13 @@ describe('on Changes decorator', () => {
     const simpleChanges = {
       foo: {
         currentValue: 0,
-        previousValue: 'fake-value'
-      }
+        previousValue: 'fake-value',
+      },
     };
     const instance1Results = [];
     const instance2Results = [];
-    instance.foo$.subscribe(change => instance1Results.push(change));
-    instance2.foo$.subscribe(change => instance2Results.push(change));
+    instance.foo$.subscribe((change) => instance1Results.push(change));
+    instance2.foo$.subscribe((change) => instance2Results.push(change));
     instance.ngOnChanges(simpleChanges as any);
     expect(instance1Results).toEqual([0]);
     expect(instance2Results).toEqual([]);
