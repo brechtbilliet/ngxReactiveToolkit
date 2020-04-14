@@ -176,6 +176,41 @@ describe('on Changes decorator', () => {
     });
   });
 
+  it('should support multiple usages', () => {
+    class MyComponent implements OnChanges {
+      @Changes('foo') foo$;
+      @Changes('bar') bar$;
+
+      ngOnChanges(changes: SimpleChanges): void {
+      }
+    }
+
+    const instance = new MyComponent();
+    const simpleChanges = {
+      foo: {
+        currentValue: [1, 2, 3],
+        previousValue: undefined
+      }
+    };
+    const simpleChanges2 = {
+      bar: {
+        currentValue: [4, 5, 6],
+        previousValue: undefined
+      }
+    };
+
+    instance.ngOnChanges(simpleChanges as any);
+    instance.ngOnChanges(simpleChanges2 as any);
+
+    const fooResults = [];
+    const barResults = [];
+    instance.foo$.subscribe(change => fooResults.push(change));
+    instance.bar$.subscribe(change => barResults.push(change));
+
+    expect(fooResults[0]).toEqual(simpleChanges.foo.currentValue);
+    expect(barResults[0]).toEqual(simpleChanges2.bar.currentValue);
+  });
+
   it('should handle multiple instances', () => {
     class MyComponent implements OnChanges {
       @Changes('foo') foo$;

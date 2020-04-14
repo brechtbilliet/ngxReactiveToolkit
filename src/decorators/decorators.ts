@@ -84,10 +84,7 @@ export function Changes(inputProp?: string, initialValue?: any) {
     function getStream() {
       const subject = new ReplaySubject(1);
       return inputProp
-        ? subject.pipe(
-          filter(changes => !!changes && changes[inputProp]),
-          map(changes => changes[inputProp].currentValue)
-        )
+        ? subject.pipe(map(changes => changes[inputProp].currentValue))
         : subject;
     }
 
@@ -127,7 +124,9 @@ export function Changes(inputProp?: string, initialValue?: any) {
       if (oldNgOnChanges) {
         oldNgOnChanges.apply(this, [simpleChanges]);
       }
-      this[accessor].next(simpleChanges);
+      if(!inputProp || simpleChanges[inputProp]) {
+        this[accessor].next(simpleChanges);
+      }
     };
   };
 }
