@@ -22,7 +22,7 @@ import { filter, map, startWith } from 'rxjs/operators';
 */
 
 export function Destroy() {
-  return function(target: any, key: string) {
+  return function (target: any, key: string) {
     const oldNgOnDestroy = target.constructor.prototype.ngOnDestroy;
     if (!oldNgOnDestroy) {
       throw new Error(
@@ -34,7 +34,7 @@ export function Destroy() {
     const secret = `_${key}$`;
 
     Object.defineProperty(target, accessor, {
-      get: function() {
+      get: function () {
         if (this[secret]) {
           return this[secret];
         }
@@ -43,17 +43,17 @@ export function Destroy() {
       }
     });
     Object.defineProperty(target, key, {
-      get: function() {
+      get: function () {
         return this[accessor];
       },
-      set: function() {
+      set: function () {
         throw new Error(
           'You cannot set this property in the Component if you use @Destroy'
         );
       }
     });
 
-    target.constructor.prototype.ngOnDestroy = function() {
+    target.constructor.prototype.ngOnDestroy = function () {
       if (oldNgOnDestroy) {
         oldNgOnDestroy.apply(this, arguments);
       }
@@ -80,14 +80,14 @@ export function Destroy() {
 */
 
 export function Changes(inputProp?: string, initialValue?: any) {
-  return function(target: any, key: string) {
+  return function (target: any, key: string) {
     function getStream() {
       const subject = new ReplaySubject(1);
       return inputProp
         ? subject.pipe(
-          filter(changes => !!changes && changes[inputProp]),
-          map(changes => changes[inputProp].currentValue)
-        )
+            filter(changes => !!changes && changes[inputProp]),
+            map(changes => changes[inputProp].currentValue)
+          )
         : subject;
     }
 
@@ -102,7 +102,7 @@ export function Changes(inputProp?: string, initialValue?: any) {
     const secret = `_${key}$`;
 
     Object.defineProperty(target, accessor, {
-      get: function() {
+      get: function () {
         if (this[secret]) {
           return this[secret];
         }
@@ -111,19 +111,19 @@ export function Changes(inputProp?: string, initialValue?: any) {
       }
     });
     Object.defineProperty(target, key, {
-      get: function() {
+      get: function () {
         return initialValue !== undefined
           ? this[accessor].pipe(startWith(initialValue))
           : this[accessor].asObservable();
       },
-      set: function() {
+      set: function () {
         throw new Error(
           'You cannot set this property in the Component if you use @Changes'
         );
       }
     });
 
-    target.ngOnChanges = function(simpleChanges: SimpleChanges) {
+    target.ngOnChanges = function (simpleChanges: SimpleChanges) {
       if (oldNgOnChanges) {
         oldNgOnChanges.apply(this, [simpleChanges]);
       }
@@ -131,4 +131,3 @@ export function Changes(inputProp?: string, initialValue?: any) {
     };
   };
 }
-

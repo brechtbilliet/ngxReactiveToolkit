@@ -1,11 +1,9 @@
-import {
-  MonoTypeOperatorFunction,
-  Observable,
-  Subject
-} from 'rxjs';
+import { MonoTypeOperatorFunction, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-export function takeUntilDestroy<T>(instance: { [key: string]: any }): MonoTypeOperatorFunction<T> {
+export function takeUntilDestroy<T>(instance: {
+  [key: string]: any;
+}): MonoTypeOperatorFunction<T> {
   return (source: Observable<T>) => {
     const oldNgOnDestroy = instance.ngOnDestroy;
 

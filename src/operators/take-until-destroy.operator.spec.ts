@@ -8,8 +8,7 @@ describe('operator: takeUntilDestroy', () => {
       class MyComponent implements OnDestroy {
         tmp$ = of('').pipe(takeUntilDestroy(this));
 
-        ngOnDestroy(): void {
-        }
+        ngOnDestroy(): void {}
       }
 
       const instance = new MyComponent();
@@ -40,16 +39,19 @@ describe('operator: takeUntilDestroy', () => {
       class MyComponent implements OnDestroy {
         tmp$ = of('').pipe(takeUntilDestroy(this));
 
-        ngOnDestroy(): void {
-        }
+        ngOnDestroy(): void {}
       }
 
       const instance1DestroyResults = [];
       const instance2DestroyResults = [];
       const instance = new MyComponent();
       const instance2 = new MyComponent();
-      instance['__takeUntilDestroy$'].subscribe(r => instance1DestroyResults.push(r));
-      instance2['__takeUntilDestroy$'].subscribe(r => instance2DestroyResults.push(r));
+      instance['__takeUntilDestroy$'].subscribe(r =>
+        instance1DestroyResults.push(r)
+      );
+      instance2['__takeUntilDestroy$'].subscribe(r =>
+        instance2DestroyResults.push(r)
+      );
       instance['ngOnDestroy']();
       expect(instance1DestroyResults.length).toBe(1);
       expect(instance2DestroyResults.length).toBe(0);
