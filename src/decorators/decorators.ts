@@ -1,6 +1,6 @@
 import { SimpleChanges } from '@angular/core';
 import { Subject, ReplaySubject } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
@@ -48,7 +48,7 @@ export function Destroy() {
       },
       set: function () {
         throw new Error(
-          'You cannot set this property in the Component if you use @Destroy'
+          'You cannot set this property in the Component if you use @Destroy.'
         );
       }
     });
@@ -79,46 +79,35 @@ export function Destroy() {
     }
 */
 
-export function Changes(inputProp?: string, initialValue?: any) {
+export function Changes(inputProp?: string) {
   return function (target: any, key: string) {
-    function getStream() {
-      const subject = new ReplaySubject(1);
-      return inputProp
-        ? subject.pipe(
-            filter(changes => !!changes && changes[inputProp]),
-            map(changes => changes[inputProp].currentValue)
-          )
-        : subject;
-    }
-
     const oldNgOnChanges = target.constructor.prototype.ngOnChanges;
+
     if (!oldNgOnChanges) {
       throw new Error(
         `ngOnChanges must be implemented for ${target.constructor.name}`
       );
     }
 
-    const accessor = `${key}$`;
-    const secret = `_${key}$`;
+    const stateSub = new ReplaySubject(1);
+    const state = inputProp
+      ? stateSub.pipe(
+          filter(changes => !!changes && changes[inputProp]),
+          map(changes => changes[inputProp].currentValue)
+        )
+      : stateSub.asObservable();
 
-    Object.defineProperty(target, accessor, {
-      get: function () {
-        if (this[secret]) {
-          return this[secret];
-        }
-        this[secret] = getStream();
-        return this[secret];
-      }
-    });
+    // Object.defineProperty provides the value property as well.
+    // The reason it's not used is because we want to display a meaningful message
+    // to the consumer when he tries to mutate the property himself.
+    // That would not be possible with the without the use of get and set.
     Object.defineProperty(target, key, {
       get: function () {
-        return initialValue !== undefined
-          ? this[accessor].pipe(startWith(initialValue))
-          : this[accessor].asObservable();
+        return state;
       },
       set: function () {
         throw new Error(
-          'You cannot set this property in the Component if you use @Changes'
+          'You cannot set this property in the Component if you use @Changes.'
         );
       }
     });
@@ -127,7 +116,8 @@ export function Changes(inputProp?: string, initialValue?: any) {
       if (oldNgOnChanges) {
         oldNgOnChanges.apply(this, [simpleChanges]);
       }
-      this[accessor].next(simpleChanges);
+
+      stateSub.next(simpleChanges);
     };
   };
 }
