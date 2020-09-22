@@ -203,6 +203,18 @@ describe('on Changes decorator', () => {
     expect(instance2Results).toEqual([]);
   });
 
+  it('should create a single instance of the observable', () => {
+    class MyComponent implements OnChanges {
+      @Changes('foo') foo$;
+
+      ngOnChanges(): void {}
+    }
+
+    const instance = new MyComponent();
+
+    expect(instance.foo$).toBe(instance.foo$);
+  });
+
   it('should handle undefined', () => {
     class MyComponent implements OnChanges {
       @Changes('foo') foo$;

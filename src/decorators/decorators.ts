@@ -1,6 +1,6 @@
 import { SimpleChanges } from '@angular/core';
 import { Subject, ReplaySubject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 // These decorators are all about utils to turn lifecycle events into streams
 /*
@@ -48,7 +48,7 @@ export function Destroy() {
       },
       set: function () {
         throw new Error(
-          'You cannot set this property in the Component if you use @Destroy.'
+          'You cannot set this property in the Component if you use @Destroy'
         );
       }
     });
@@ -79,8 +79,8 @@ export function Destroy() {
     }
 */
 
-export function Changes(inputProp?: string) {
-  return function (target: any, key: string) {
+export function Changes(inputProp?: string, initialValue?: any) {
+  return function (target: any, key: string): any {
     const oldNgOnChanges = target.constructor.prototype.ngOnChanges;
 
     if (!oldNgOnChanges) {
@@ -89,35 +89,59 @@ export function Changes(inputProp?: string) {
       );
     }
 
-    const stateSub = new ReplaySubject(1);
-    const state = inputProp
-      ? stateSub.pipe(
-          filter(changes => !!changes && changes[inputProp]),
-          map(changes => changes[inputProp].currentValue)
-        )
-      : stateSub.asObservable();
-
-    // Object.defineProperty provides the value property as well.
-    // The reason it's not used is because we want to display a meaningful message
-    // to the consumer when he tries to mutate the property himself.
-    // That would not be possible with the without the use of get and set.
-    Object.defineProperty(target, key, {
-      get: function () {
-        return state;
-      },
-      set: function () {
-        throw new Error(
-          'You cannot set this property in the Component if you use @Changes.'
-        );
-      }
-    });
-
     target.ngOnChanges = function (simpleChanges: SimpleChanges) {
       if (oldNgOnChanges) {
         oldNgOnChanges.apply(this, [simpleChanges]);
       }
 
-      stateSub.next(simpleChanges);
+      this[accessorSub].next(simpleChanges);
+    };
+
+    const secretSub = `_${key}$Sub`;
+    const secretObs = `_${key}$Obs`;
+    const accessorSub = `${key}$Sub`;
+    const accessorObs = `${key}$Obs`;
+
+    Object.defineProperty(target, accessorSub, {
+      get: function () {
+        if (this[secretSub]) {
+          return this[secretSub];
+        }
+
+        this[secretSub] = new ReplaySubject(1);
+
+        return this[secretSub];
+      }
+    });
+
+    Object.defineProperty(target, accessorObs, {
+      get: function () {
+        if (this[secretObs]) {
+          return this[secretObs];
+        }
+
+        this[secretObs] = inputProp
+          ? this[accessorSub].pipe(
+              filter(changes => !!changes && changes[inputProp]),
+              map(changes => changes[inputProp].currentValue),
+              s =>
+                initialValue !== undefined ? s.pipe(startWith(initialValue)) : s
+            )
+          : this[accessorSub].asObservable();
+
+        return this[secretObs];
+      }
+    });
+
+    return {
+      get: function () {
+        return this[accessorObs];
+      },
+      set: function () {
+        throw new Error(
+          'You cannot set this property in the Component if you use @Changes'
+        );
+      }
     };
   };
 }
