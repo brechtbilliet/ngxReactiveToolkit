@@ -1,55 +1,31 @@
 {
   "name": "ngx-reactivetoolkit",
   "version": "8.0.1",
+  "keywords": ["rxjs", "angular"],
   "description": "",
-  "main": "index.js",
+  "author": "Brecht Billiet",
+  "contributors": [
+    "Ruben Vermeulen"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brechtbilliet/ngxReactiveToolkit.git"
+  },
+  "homepage": "https://github.com/brechtbilliet/ngxReactiveToolkit#readme",
+  "bugs": {
+    "url": "https://github.com/brechtbilliet/ngxReactiveToolkit/issues"
+  },
   "scripts": {
     "test": "NODE_ENV=test jest --no-cache --coverage",
-    "build": "rimraf dist && node_modules/.bin/ngc",
-    "deploy": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cd dist && npm publish"
+    "build": "ng-packagr",
+    "deploy": "npm run build && cd dist && npm publish"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/brechtbilliet/ngxReactiveToolkit.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/brechtbilliet/ngxReactiveToolkit/issues"
-  },
-  "homepage": "https://github.com/brechtbilliet/ngxReactiveToolkit#readme",
-  "jest": {
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.ts",
-      "!src/index.ts",
-      "!**/node_modules/**"
-    ],
-    "coverageReporters": [
-      "cobertura",
-      "lcov",
-      "json"
-    ],
-    "globals": {
-      "__TS_CONFIG__": "./tsconfig.jest.json"
-    },
-    "setupFilesAfterEnv": ["./test-bundle.js"],
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(js|ts)$": "<rootDir>/jest-preprocessor.js"
-    },
-    "testRegex": "(/src/.*\\.(spec.ts))$"
-  },
-  "peerDependencies": {},
   "devDependencies": {
     "@angular-devkit/schematics": "^9.1.0",
     "@angular/compiler": "^9.1.0",
@@ -59,9 +35,9 @@
     "husky": "^4.2.3",
     "jest": "^25.2.7",
     "jest-cli": "^25.2.7",
+    "ng-packagr": "^10.1.0",
     "prettier": "^2.0.2",
     "pretty-quick": "^2.0.1",
-    "rimraf": "^3.0.2",
     "rxjs": "^6.5.5",
     "typescript": "~3.8.3",
     "zone.js": "~0.10.3"
