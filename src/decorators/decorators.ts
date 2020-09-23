@@ -80,54 +80,68 @@ export function Destroy() {
 */
 
 export function Changes(inputProp?: string, initialValue?: any) {
-  return function (target: any, key: string) {
-    function getStream() {
-      const subject = new ReplaySubject(1);
-      return inputProp
-        ? subject.pipe(
-            filter(changes => !!changes && changes[inputProp]),
-            map(changes => changes[inputProp].currentValue)
-          )
-        : subject;
-    }
-
+  return function (target: any, key: string): any {
     const oldNgOnChanges = target.constructor.prototype.ngOnChanges;
+
     if (!oldNgOnChanges) {
       throw new Error(
         `ngOnChanges must be implemented for ${target.constructor.name}`
       );
     }
 
-    const accessor = `${key}$`;
-    const secret = `_${key}$`;
+    target.ngOnChanges = function (simpleChanges: SimpleChanges) {
+      if (oldNgOnChanges) {
+        oldNgOnChanges.apply(this, [simpleChanges]);
+      }
 
-    Object.defineProperty(target, accessor, {
+      this[accessorSub].next(simpleChanges);
+    };
+
+    const secretSub = `_${key}$Sub`;
+    const secretObs = `_${key}$Obs`;
+    const accessorSub = `${key}$Sub`;
+    const accessorObs = `${key}$Obs`;
+
+    Object.defineProperty(target, accessorSub, {
       get: function () {
-        if (this[secret]) {
-          return this[secret];
+        if (this[secretSub]) {
+          return this[secretSub];
         }
-        this[secret] = getStream();
-        return this[secret];
+
+        this[secretSub] = new ReplaySubject(1);
+
+        return this[secretSub];
       }
     });
-    Object.defineProperty(target, key, {
+
+    Object.defineProperty(target, accessorObs, {
       get: function () {
-        return initialValue !== undefined
-          ? this[accessor].pipe(startWith(initialValue))
-          : this[accessor].asObservable();
+        if (this[secretObs]) {
+          return this[secretObs];
+        }
+
+        this[secretObs] = inputProp
+          ? this[accessorSub].pipe(
+              filter(changes => !!changes && changes[inputProp]),
+              map(changes => changes[inputProp].currentValue),
+              s =>
+                initialValue !== undefined ? s.pipe(startWith(initialValue)) : s
+            )
+          : this[accessorSub].asObservable();
+
+        return this[secretObs];
+      }
+    });
+
+    return {
+      get: function () {
+        return this[accessorObs];
       },
       set: function () {
         throw new Error(
           'You cannot set this property in the Component if you use @Changes'
         );
       }
-    });
-
-    target.ngOnChanges = function (simpleChanges: SimpleChanges) {
-      if (oldNgOnChanges) {
-        oldNgOnChanges.apply(this, [simpleChanges]);
-      }
-      this[accessor].next(simpleChanges);
     };
   };
 }
