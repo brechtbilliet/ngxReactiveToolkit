@@ -1,4 +1,9 @@
 #Changelog
+
+## 9.0.0
+
+- Upgrade to Angular 10
+
 ## 8.0.1
 
 - Fix issue #29

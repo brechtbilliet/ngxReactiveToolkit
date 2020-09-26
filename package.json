@@ -1,7 +1,10 @@
 {
   "name": "ngx-reactivetoolkit",
-  "version": "8.0.1",
-  "keywords": ["rxjs", "angular"],
+  "version": "9.0.0",
+  "keywords": [
+    "rxjs",
+    "angular"
+  ],
   "description": "",
   "author": "Brecht Billiet",
   "contributors": [
@@ -27,19 +30,19 @@
     }
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "^9.1.0",
-    "@angular/compiler": "^9.1.0",
-    "@angular/compiler-cli": "^9.1.0",
-    "@angular/core": "^9.1.0",
-    "@types/jest": "^25.2.1",
-    "husky": "^4.2.3",
-    "jest": "^25.2.7",
-    "jest-cli": "^25.2.7",
+    "@angular-devkit/schematics": "~10.1.1",
+    "@angular/compiler": "~10.1.1",
+    "@angular/compiler-cli": "~10.1.1",
+    "@angular/core": "~10.1.1",
+    "@types/jest": "^25.2.3",
+    "husky": "^4.3.0",
+    "jest": "^25.5.4",
+    "jest-cli": "^25.5.4",
     "ng-packagr": "^10.1.0",
-    "prettier": "^2.0.2",
-    "pretty-quick": "^2.0.1",
-    "rxjs": "^6.5.5",
-    "typescript": "~3.8.3",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^2.0.2",
+    "rxjs": "~6.6.0",
+    "typescript": "~4.0.2",
     "zone.js": "~0.10.3"
   }
 }
