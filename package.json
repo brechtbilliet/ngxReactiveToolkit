@@ -1,7 +1,10 @@
 {
   "name": "ngx-reactivetoolkit",
-  "version": "8.0.1",
-  "keywords": ["rxjs", "angular"],
+  "version": "8.0.2",
+  "keywords": [
+    "rxjs",
+    "angular"
+  ],
   "description": "",
   "author": "Brecht Billiet",
   "contributors": [

@@ -1,4 +1,9 @@
 #Changelog
+
+## 8.0.2
+
+- Update to ng-packagr (#32)
+
 ## 8.0.1
 
 - Fix issue #29
