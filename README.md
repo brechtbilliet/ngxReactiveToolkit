@@ -17,6 +17,10 @@ npm install --save ngx-reactivetoolkit
 
 ### Versions
 
+**Angular 11**: 9.x.x
+
+**Angular 10**: 9.x.x
+
 **Angular 9**: 8.x.x
 
 **Angular 8**: 7.x.x, 6.x.x
@@ -122,7 +126,7 @@ export class HelloComponent implements OnChanges {
 
 ### The takeUntilDestroy operator
 
-The takeUntilDestroy operator is a cleaner alternative over the destroy decorator. The implementation is inspired by Netanel Basal his take on it.
+The takeUntilDestroy operator is a cleaner alternative over the destroy decorator. The implementation is mostly identical to the one of Netanel Basal. Credits to him and his team.
 
 When using streams in angular you have to make sure that you are unsubscribing to your streams.
 When using async pipes those particular streams are already getting unsubscribed for you automatically.
@@ -134,21 +138,18 @@ In that case there are two things you can do:
 The takeUntilDestroy operator covers that logic for you.
 
 ```javascript
-import {takeUntilDestroy} from 'ngx-reactivetoolkit';
+import {UntilDestroy, takeUntilDestroy} from 'ngx-reactivetoolkit';
 
+@UntilDestroy()
 @Component({
     selector: 'my-component',
     template: `...`,
 })
-export class HelloComponent implements OnDestroy {
+export class HelloComponent {
     constructor() {
         interval(500).pipe(
-            // be safe and use the created destroy$ to stop the stream automatically
             takeUntilDestroy(this)
         ).subscribe(e => console.log(e));
     }
-
-    // because of aot we need to implement the ngOnDestroy method for @Destroy to work
-    ngOnDestroy(): void {}
 }
 ```
