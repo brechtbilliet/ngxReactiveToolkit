@@ -17,6 +17,10 @@ npm install --save ngx-reactivetoolkit
 
 ### Versions
 
+**Angular 13**: 10.x.x
+
+**Angular 12**: 9.x.x
+
 **Angular 11**: 9.x.x
 
 **Angular 10**: 9.x.x

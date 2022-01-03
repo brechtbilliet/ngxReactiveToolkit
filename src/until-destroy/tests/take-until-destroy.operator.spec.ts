@@ -108,11 +108,8 @@ describe('takeUntilDestroy operator with non-directive/component classes', () =>
       const spy = createObserver();
 
       class Test {
-        // Here we explicitly set `@ts-ignore` since the compiler will throw
-        // because of non-existing method.
-        // @ts-ignore
         dummy = new Subject()
-          .pipe(takeUntilDestroy(this, 'destroy'))
+          .pipe(takeUntilDestroy(this, 'destroy' as any))
           .subscribe(spy);
       }
 
